@@ -25,6 +25,12 @@ module.exports = {
     compress: true,
     port: 8080
   },
+  resolve: {
+    alias: {
+      images: path.resolve(__dirname, 'src/images')
+    }
+  },
+
   module: {
     rules: [{
       test: /\.js$/,

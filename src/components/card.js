@@ -1,8 +1,8 @@
-export function handleDeleteCard(cardElement) {
+function handleDeleteCard(cardElement) {
     cardElement.remove()
   };
 
-export function createCard (card, deleteFunction) {
+function createCard (card, deleteFunction) {
     const cardTemplate = document.getElementById('card-template').content.querySelector('.card').cloneNode(true);
     const image = cardTemplate.querySelector('.card__image');
     image.src = card.link;
@@ -16,3 +16,5 @@ export function createCard (card, deleteFunction) {
 
     return cardTemplate;
   };
+
+export { handleDeleteCard, createCard };
