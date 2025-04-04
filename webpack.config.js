@@ -25,22 +25,22 @@ module.exports = {
     compress: true,
     port: 8080
   },
-  resolve: {
-    alias: {
-      images: path.resolve(__dirname, 'src/images')
-    }
-  },
+  // resolve: {
+  //   alias: {
+  //     images: path.resolve(__dirname, 'src/images')
+  //   }
+  // },
 
   module: {
     rules: [{
       test: /\.js$/,
         exclude: /node_modules/,
-        use: {
+      //   use: {
         loader: 'babel-loader',
-        options: {
-          sourceType: 'unambiguous'
-        }
-      }
+      //   options: {
+      //     sourceType: 'unambiguous'
+      //   }
+      // }
       },
       {
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
@@ -57,10 +57,10 @@ module.exports = {
           'postcss-loader'
         ]
       },
-      {
-        test: /\.html$/,
-        use: 'html-loader'
-      },
+      // {
+      //   test: /\.html$/,
+      //   use: 'html-loader'
+      // },
     ]
   },
   plugins: [
