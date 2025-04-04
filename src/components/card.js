@@ -2,8 +2,12 @@ function handleDeleteCard(cardElement) {
     cardElement.remove()
   };
 
-function createCard (card, deleteFunction) {
-    const cardTemplate = document.getElementById('card-template').content.querySelector('.card').cloneNode(true);
+function createCard (card, deleteFunction, likeFunction) {
+    const cardTemplate = document
+    .getElementById('card-template')
+    .content.querySelector('.card')
+    .cloneNode(true);
+
     const image = cardTemplate.querySelector('.card__image');
     image.src = card.link;
     image.alt = `Изображение места: ${card.name}`;
@@ -11,7 +15,12 @@ function createCard (card, deleteFunction) {
 
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
     deleteButton.addEventListener('click', () => {
-      deleteFunction(cardTemplate);
+        deleteFunction(cardTemplate);
+    });
+
+    const likeButton = cardTemplate.querySelector('.card__like-button');
+    likeButton.addEventListener('click', () => {
+        likeFunction(likeButton);
     });
 
     return cardTemplate;
