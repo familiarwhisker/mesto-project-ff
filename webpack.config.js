@@ -15,9 +15,9 @@ module.exports = {
   mode: 'development',
   devtool: false,
   stats: {
-    errorDetails: true, // Для подробных ошибок
-    colors: true, // Для цветных логов
-    modules: true, // Показывает модули в сборке
+    errorDetails: true,
+    colors: true,
+    modules: true,
   },
   devServer: {
     static: path.resolve(__dirname, './dist'),
@@ -25,22 +25,12 @@ module.exports = {
     compress: true,
     port: 8080
   },
-  // resolve: {
-  //   alias: {
-  //     images: path.resolve(__dirname, 'src/images')
-  //   }
-  // },
 
   module: {
     rules: [{
       test: /\.js$/,
         exclude: /node_modules/,
-      //   use: {
         loader: 'babel-loader',
-      //   options: {
-      //     sourceType: 'unambiguous'
-      //   }
-      // }
       },
       {
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
@@ -57,10 +47,6 @@ module.exports = {
           'postcss-loader'
         ]
       },
-      // {
-      //   test: /\.html$/,
-      //   use: 'html-loader'
-      // },
     ]
   },
   plugins: [

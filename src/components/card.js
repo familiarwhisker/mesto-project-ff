@@ -2,7 +2,7 @@ function handleDeleteCard(cardElement) {
     cardElement.remove()
   };
 
-function createCard (card, deleteFunction, likeFunction) {
+function createCard (card, deleteFunction, likeFunction, imageClickFunction) {
     const cardTemplate = document
     .getElementById('card-template')
     .content.querySelector('.card')
@@ -21,6 +21,10 @@ function createCard (card, deleteFunction, likeFunction) {
     const likeButton = cardTemplate.querySelector('.card__like-button');
     likeButton.addEventListener('click', () => {
         likeFunction(likeButton);
+    });
+
+    image.addEventListener('click', () => {
+        imageClickFunction(card.name, card.link);
     });
 
     return cardTemplate;

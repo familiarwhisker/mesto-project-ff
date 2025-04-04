@@ -28,6 +28,10 @@ const cardForm = newCardPopup.querySelector('.popup__form');
 const cardNameInput = cardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = cardForm.querySelector('.popup__input_type_url');
 
+// Открытие изображения в попапе
+const popupImage = imagePopup.querySelector('.popup__image');
+const popupCaption = imagePopup.querySelector('.popup__caption');
+
 addButton.addEventListener('click', () => openModal(newCardPopup));
 
 editButton.addEventListener('click', () => {
@@ -47,7 +51,7 @@ editForm.addEventListener('submit', handleEditFormSubmit);
 popups.forEach(setPopupListeners);
 
 initialCards.forEach((card) => {
-  const cardElement = createCard(card, handleDeleteCard, handleLikeClick);
+  const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
   placesList.append(cardElement);
 });
 
@@ -61,7 +65,7 @@ function handleAddCardFormSubmit(evt) {
     link: cardLinkInput.value
   };
 
-  const cardElement = createCard(newCard, handleDeleteCard, handleLikeClick);
+  const cardElement = createCard(newCard, handleDeleteCard, handleLikeClick, handleCardImageClick);
   placesList.prepend(cardElement);
 
   cardForm.reset();
@@ -71,4 +75,12 @@ function handleAddCardFormSubmit(evt) {
 
 function handleLikeClick(likeButton) {
   likeButton.classList.toggle('card__like-button_is-active');
+};
+
+function handleCardImageClick(name, link) {
+  popupImage.src = link;
+  popupImage.alt = `Изображение места: ${name}`;
+  popupCaption.textContent = name;
+
+  openModal(imagePopup);
 };
