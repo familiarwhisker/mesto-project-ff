@@ -2,6 +2,7 @@ import './pages/index.css';
 import { handleDeleteCard, createCard } from './components/card.js';
 import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
+import { enableValidation, clearValidation } from './components/validation.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
