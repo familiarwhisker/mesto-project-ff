@@ -33,6 +33,16 @@ const cardLinkInput = cardForm.querySelector('.popup__input_type_url');
 const popupImage = imagePopup.querySelector('.popup__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
 
+// Валидация
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 addButton.addEventListener('click', () => openModal(newCardPopup));
 
 editButton.addEventListener('click', () => {
