@@ -46,6 +46,8 @@ const validationConfig = {
 enableValidation(validationConfig);
 
 addButton.addEventListener('click', () => {
+  cardForm.reset();
+  clearValidation(cardForm, validationConfig);
   openModal(newCardPopup);
 });
 
