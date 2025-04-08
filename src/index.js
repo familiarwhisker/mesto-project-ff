@@ -43,11 +43,16 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 };
 
-addButton.addEventListener('click', () => openModal(newCardPopup));
+enableValidation(validationConfig);
+
+addButton.addEventListener('click', () => {
+  openModal(newCardPopup);
+});
 
 editButton.addEventListener('click', () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(editForm, validationConfig);
   openModal(editPopup);
 });
 
@@ -95,3 +100,4 @@ function handleCardImageClick(name, link) {
 
   openModal(imagePopup);
 };
+
