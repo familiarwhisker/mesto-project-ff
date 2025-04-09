@@ -3,6 +3,7 @@ import { handleDeleteCard, createCard } from './components/card.js';
 import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
+import { getUserInfo } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
@@ -45,6 +46,15 @@ const validationConfig = {
 
 enableValidation(validationConfig);
 
+getUserInfo()
+  .then((data) => {
+    profileTitle.textContent = data.name;
+    profileDescription.textContent = data.about;
+  })
+  .catch((err) => {
+    console.log(`Ошибка при загрузке профиля: ${err}`);
+  });
+
 addButton.addEventListener('click', () => {
   cardForm.reset();
   clearValidation(cardForm, validationConfig);
@@ -63,7 +73,8 @@ function handleEditFormSubmit(evt) {
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
-}
+};
+
 editForm.addEventListener('submit', handleEditFormSubmit);
 
 popups.forEach(setPopupListeners);
@@ -102,4 +113,3 @@ function handleCardImageClick(name, link) {
 
   openModal(imagePopup);
 };
-
