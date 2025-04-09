@@ -1,8 +1,16 @@
-function handleDeleteCard(cardElement) {
-    cardElement.remove()
-  };
+import { deleteCard } from './api.js';
 
-function createCard (card, deleteFunction, likeFunction, imageClickFunction) {
+function handleDeleteCard(cardElement, cardId) {
+  deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch((err) => {
+      console.log(`Ошибка при удалении карточки: ${err}`);
+    });
+};
+
+function createCard (card, userId, deleteFunction, likeFunction, imageClickFunction) {
     const cardTemplate = document
     .getElementById('card-template')
     .content.querySelector('.card')
@@ -14,9 +22,13 @@ function createCard (card, deleteFunction, likeFunction, imageClickFunction) {
     cardTemplate.querySelector('.card__title').textContent = card.name;
 
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
-    deleteButton.addEventListener('click', () => {
-        deleteFunction(cardTemplate);
-    });
+    if (card.owner && card.owner._id === userId) {
+      deleteButton.addEventListener('click', () => {
+        deleteFunction(cardTemplate, card._id);
+      });
+    } else {
+      deleteButton.remove();
+    };
 
     const likeButton = cardTemplate.querySelector('.card__like-button');
     likeButton.addEventListener('click', () => {

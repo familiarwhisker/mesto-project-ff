@@ -3,7 +3,7 @@ import { handleDeleteCard, createCard } from './components/card.js';
 // import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo, getInitialCards, updateUserInfo } from './components/api.js';
+import { getUserInfo, getInitialCards, updateUserInfo, postCard, deleteCard } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
@@ -29,6 +29,7 @@ const profileDescription = document.querySelector('.profile__description');
 const cardForm = newCardPopup.querySelector('.popup__form');
 const cardNameInput = cardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = cardForm.querySelector('.popup__input_type_url');
+let userId;
 
 // Открытие изображения в попапе
 const popupImage = imagePopup.querySelector('.popup__image');
@@ -45,15 +46,6 @@ const validationConfig = {
 };
 
 enableValidation(validationConfig);
-
-// getUserInfo()
-//   .then((data) => {
-//     profileTitle.textContent = data.name;
-//     profileDescription.textContent = data.about;
-//   })
-//   .catch((err) => {
-//     console.log(`Ошибка при загрузке профиля: ${err}`);
-//   });
 
 addButton.addEventListener('click', () => {
   cardForm.reset();
@@ -91,11 +83,13 @@ popups.forEach(setPopupListeners);
 
 Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
+    userId = userData._id;
+    // console.log(cards);
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
 
     cards.forEach((card) => {
-      const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
+      const cardElement = createCard(card, userId, handleDeleteCard, handleLikeClick, handleCardImageClick, userData._id);
       placesList.append(cardElement);
     });
   })
@@ -103,33 +97,24 @@ Promise.all([getUserInfo(), getInitialCards()])
     console.log(`Ошибка при загрузке данных: ${err}`);
   });
 
-// getInitialCards()
-//   .then((cards) => {
-//     cards.forEach((card) => {
-//       const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
-//       placesList.append(cardElement);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log(`Ошибка при загрузке карточек: ${err}`);
-//   });
-
 cardForm.addEventListener('submit', handleAddCardFormSubmit);
 
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
 
-  const newCard = {
-    name: cardNameInput.value,
-    link: cardLinkInput.value
-  };
+  const name = cardNameInput.value;
+  const link = cardLinkInput.value;
 
-  const cardElement = createCard(newCard, handleDeleteCard, handleLikeClick, handleCardImageClick);
-  placesList.prepend(cardElement);
-
-  cardForm.reset();
-
-  closeModal(newCardPopup);
+  postCard(name, link)
+    .then((newCardData) => {
+      const cardElement = createCard(newCardData, userId, handleDeleteCard, handleLikeClick, handleCardImageClick);
+      placesList.prepend(cardElement);
+      cardForm.reset();
+      closeModal(newCardPopup);
+    })
+    .catch((err) => {
+      console.log(`Ошибка при добавлении карточки: ${err}`);
+    });
 };
 
 function handleLikeClick(likeButton) {
