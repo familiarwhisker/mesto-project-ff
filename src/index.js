@@ -3,7 +3,7 @@ import { handleDeleteCard, createCard } from './components/card.js';
 // import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo, getInitialCards } from './components/api.js';
+import { getUserInfo, getInitialCards, updateUserInfo } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
@@ -46,14 +46,14 @@ const validationConfig = {
 
 enableValidation(validationConfig);
 
-getUserInfo()
-  .then((data) => {
-    profileTitle.textContent = data.name;
-    profileDescription.textContent = data.about;
-  })
-  .catch((err) => {
-    console.log(`Ошибка при загрузке профиля: ${err}`);
-  });
+// getUserInfo()
+//   .then((data) => {
+//     profileTitle.textContent = data.name;
+//     profileDescription.textContent = data.about;
+//   })
+//   .catch((err) => {
+//     console.log(`Ошибка при загрузке профиля: ${err}`);
+//   });
 
 addButton.addEventListener('click', () => {
   cardForm.reset();
@@ -70,25 +70,49 @@ editButton.addEventListener('click', () => {
 
 function handleEditFormSubmit(evt) {
   evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
-  closeModal(editPopup);
+
+  const name = nameInput.value;
+  const about = jobInput.value;
+
+  updateUserInfo(name, about)
+    .then((userData) => {
+      profileTitle.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      closeModal(editPopup);
+    })
+    .catch((err) => {
+      console.log(`Ошибка при обновлении профиля: ${err}`);
+    });
 };
 
 editForm.addEventListener('submit', handleEditFormSubmit);
 
 popups.forEach(setPopupListeners);
 
-getInitialCards()
-  .then((cards) => {
+Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userData, cards]) => {
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+
     cards.forEach((card) => {
       const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
       placesList.append(cardElement);
     });
   })
   .catch((err) => {
-    console.log(`Ошибка при загрузке карточек: ${err}`);
+    console.log(`Ошибка при загрузке данных: ${err}`);
   });
+
+// getInitialCards()
+//   .then((cards) => {
+//     cards.forEach((card) => {
+//       const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
+//       placesList.append(cardElement);
+//     });
+//   })
+//   .catch((err) => {
+//     console.log(`Ошибка при загрузке карточек: ${err}`);
+//   });
 
 cardForm.addEventListener('submit', handleAddCardFormSubmit);
 
