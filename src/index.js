@@ -3,7 +3,7 @@ import { handleDeleteCard, createCard } from './components/card.js';
 // import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo, getInitialCards, updateUserInfo, postCard, deleteCard } from './components/api.js';
+import { getUserInfo, getInitialCards, updateUserInfo, postCard, likeCard, unlikeCard } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
