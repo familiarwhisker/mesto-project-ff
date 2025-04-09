@@ -97,4 +97,19 @@ const unlikeCard = (cardId) => {
   });
 };
 
-export { getUserInfo, getInitialCards, updateUserInfo, postCard, deleteCard, likeCard, unlikeCard };
+const updateAvatar = (avatarLink) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatarLink
+    })
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+};
+
+export { getUserInfo, getInitialCards, updateUserInfo, postCard, deleteCard, likeCard, unlikeCard, updateAvatar };

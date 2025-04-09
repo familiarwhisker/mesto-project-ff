@@ -3,11 +3,16 @@ import { handleDeleteCard, createCard } from './components/card.js';
 // import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo, getInitialCards, updateUserInfo, postCard, likeCard, unlikeCard } from './components/api.js';
+import { getUserInfo, getInitialCards, updateUserInfo, postCard, likeCard, unlikeCard, updateAvatar } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
+const avatarPopup = document.querySelector('.popup_type_avatar');
+const avatarForm = avatarPopup.querySelector('.popup__form');
+const avatarInput = avatarForm.querySelector('.popup__input_type_avatar');
+const avatarButton = document.querySelector('.profile__avatar-button');
+const profileAvatar = document.querySelector('.profile__image');
 
 // Кнопки
 const editButton = document.querySelector('.profile__edit-button');
@@ -46,6 +51,29 @@ const validationConfig = {
 };
 
 enableValidation(validationConfig);
+
+avatarButton.addEventListener('click', () => {
+  avatarForm.reset();
+  clearValidation(avatarForm, validationConfig);
+  openModal(avatarPopup);
+});
+
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+
+  const newAvatarLink = avatarInput.value;
+
+  updateAvatar(newAvatarLink)
+    .then((userData) => {
+      profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
+      closeModal(avatarPopup);
+    })
+    .catch((err) => {
+      console.log(`Ошибка при обновлении аватара: ${err}`);
+    });
+}
+
+avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 addButton.addEventListener('click', () => {
   cardForm.reset();
@@ -117,8 +145,19 @@ function handleAddCardFormSubmit(evt) {
     });
 };
 
-function handleLikeClick(likeButton) {
-  likeButton.classList.toggle('card__like-button_is-active');
+function handleLikeClick(likeButton, likeCounter, cardId) {
+  const isLiked = likeButton.classList.contains('card__like-button_is-active');
+  const likeRequest = isLiked ? unlikeCard(cardId) : likeCard(cardId);
+
+  likeRequest
+    .then((updatedCard) => {
+      likeCounter.textContent = updatedCard.likes.length;
+
+      likeButton.classList.toggle('card__like-button_is-active');
+    })
+    .catch((err) => {
+      console.log(`Ошибка при смене лайка: ${err}`);
+    });
 };
 
 function handleCardImageClick(name, link) {
