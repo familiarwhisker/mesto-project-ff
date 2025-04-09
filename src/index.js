@@ -1,9 +1,9 @@
 import './pages/index.css';
 import { handleDeleteCard, createCard } from './components/card.js';
-import { initialCards } from './scripts/cards.js';
+// import { initialCards } from './scripts/cards.js';
 import { openModal, closeModal, setPopupListeners } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo } from './components/api.js';
+import { getUserInfo, getInitialCards } from './components/api.js';
 
 // DOM
 const placesList = document.querySelector('.places__list');
@@ -79,10 +79,16 @@ editForm.addEventListener('submit', handleEditFormSubmit);
 
 popups.forEach(setPopupListeners);
 
-initialCards.forEach((card) => {
-  const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
-  placesList.append(cardElement);
-});
+getInitialCards()
+  .then((cards) => {
+    cards.forEach((card) => {
+      const cardElement = createCard(card, handleDeleteCard, handleLikeClick, handleCardImageClick);
+      placesList.append(cardElement);
+    });
+  })
+  .catch((err) => {
+    console.log(`Ошибка при загрузке карточек: ${err}`);
+  });
 
 cardForm.addEventListener('submit', handleAddCardFormSubmit);
 

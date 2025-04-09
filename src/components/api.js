@@ -18,4 +18,15 @@ const getUserInfo = () => {
   });
 };
 
-export { getUserInfo };
+const getInitialCards = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+};
+
+export { getUserInfo, getInitialCards };
