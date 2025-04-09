@@ -1,7 +1,6 @@
 import './pages/index.css';
 import { handleDeleteCard, createCard } from './components/card.js';
-// import { initialCards } from './scripts/cards.js';
-import { openModal, closeModal, setPopupListeners } from './components/modal.js';
+import { openModal, closeModal, setPopupListeners, renderLoading } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { getUserInfo, getInitialCards, updateUserInfo, postCard, likeCard, unlikeCard, updateAvatar } from './components/api.js';
 
@@ -62,6 +61,9 @@ function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
 
   const newAvatarLink = avatarInput.value;
+  const submitButton = avatarForm.querySelector(validationConfig.submitButtonSelector);
+
+  renderLoading(true, submitButton);
 
   updateAvatar(newAvatarLink)
     .then((userData) => {
@@ -70,6 +72,9 @@ function handleAvatarFormSubmit(evt) {
     })
     .catch((err) => {
       console.log(`Ошибка при обновлении аватара: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(false, submitButton);
     });
 }
 
@@ -93,6 +98,9 @@ function handleEditFormSubmit(evt) {
 
   const name = nameInput.value;
   const about = jobInput.value;
+  const submitButton = editForm.querySelector(validationConfig.submitButtonSelector);
+
+  renderLoading(true, submitButton);
 
   updateUserInfo(name, about)
     .then((userData) => {
@@ -102,6 +110,9 @@ function handleEditFormSubmit(evt) {
     })
     .catch((err) => {
       console.log(`Ошибка при обновлении профиля: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(false, submitButton);
     });
 };
 
@@ -112,7 +123,6 @@ popups.forEach(setPopupListeners);
 Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
     userId = userData._id;
-    // console.log(cards);
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
 
@@ -132,6 +142,9 @@ function handleAddCardFormSubmit(evt) {
 
   const name = cardNameInput.value;
   const link = cardLinkInput.value;
+  const submitButton = cardForm.querySelector(validationConfig.submitButtonSelector);
+
+  renderLoading(true, submitButton);
 
   postCard(name, link)
     .then((newCardData) => {
@@ -142,6 +155,9 @@ function handleAddCardFormSubmit(evt) {
     })
     .catch((err) => {
       console.log(`Ошибка при добавлении карточки: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(false, submitButton);
     });
 };
 
