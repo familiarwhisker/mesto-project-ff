@@ -1,4 +1,11 @@
-import { deleteCard, likeCard, unlikeCard } from './api.js';
+import { deleteCard } from './api.js';
+
+function getCardTemplate() {
+  return document
+    .getElementById('card-template')
+    .content.querySelector('.card')
+    .cloneNode(true);
+};
 
 function handleDeleteCard(cardElement, cardId) {
   deleteCard(cardId)
@@ -11,10 +18,7 @@ function handleDeleteCard(cardElement, cardId) {
 };
 
 function createCard(card, userId, deleteFunction, likeFunction, imageClickFunction) {
-  const cardTemplate = document
-    .getElementById('card-template')
-    .content.querySelector('.card')
-    .cloneNode(true);
+  const cardTemplate = getCardTemplate();
 
   const image = cardTemplate.querySelector('.card__image');
   image.src = card.link;
