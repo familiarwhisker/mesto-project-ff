@@ -1,6 +1,7 @@
 import './pages/index.css';
 import { handleDeleteCard, createCard } from './components/card.js';
-import { openModal, closeModal, setPopupListeners, renderLoading } from './components/modal.js';
+import { openModal, closeModal, setPopupListeners } from './components/modal.js';
+import { renderLoading } from './components/utils.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { getUserInfo, getInitialCards, updateUserInfo, postCard, likeCard, unlikeCard, updateAvatar } from './components/api.js';
 
@@ -81,8 +82,6 @@ function handleAvatarFormSubmit(evt) {
 avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 addButton.addEventListener('click', () => {
-  cardForm.reset();
-  clearValidation(cardForm, validationConfig);
   openModal(newCardPopup);
 });
 
@@ -151,6 +150,7 @@ function handleAddCardFormSubmit(evt) {
       const cardElement = createCard(newCardData, userId, handleDeleteCard, handleLikeClick, handleCardImageClick);
       placesList.prepend(cardElement);
       cardForm.reset();
+      clearValidation(cardForm, validationConfig);
       closeModal(newCardPopup);
     })
     .catch((err) => {

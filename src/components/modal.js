@@ -26,8 +26,4 @@ function setPopupListeners(popup) {
   });
 };
 
-function renderLoading(isLoading, buttonElement, defaultText = 'Сохранить') {
-  buttonElement.textContent = isLoading ? 'Сохранение...' : defaultText;
-}
-
-export { openModal, closeModal, setPopupListeners, renderLoading };
+export { openModal, closeModal, setPopupListeners };
