@@ -124,6 +124,7 @@ Promise.all([getUserInfo(), getInitialCards()])
     userId = userData._id;
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
+    profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
 
     cards.forEach((card) => {
       const cardElement = createCard(card, userId, handleDeleteCard, handleLikeClick, handleCardImageClick, userData._id);
